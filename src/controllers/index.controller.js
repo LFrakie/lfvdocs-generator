@@ -16,10 +16,22 @@ const pool = new Pool({
 
 const rootHome = async (req, res) => {
 
-        res.send(`<h1> Users </h1>
-            <p>Hola worldo :D</p>
-            <strong>strong</strong>
-            `);
+        res.send(`
+                <input type="text" placeholder="URL de document" name="urlvdocn" id="urlvdoc">
+                <input type="text" placeholder="NOMBRE de document" name="namvdocn" id="namvdoc">
+  <br>
+  <button onclick="toGenerate()">Generar</button>
+
+    <script type='text/javascript'>
+        function toGenerate() {
+            url = 'https://lfvdocs-generator.herokuapp.com/users/' + document.getElementById("urlvdoc").value + '/' + document.getElementById("namvdoc").value
+            window.open(url, '_self');
+        }
+</script>
+`);
+
+
+
 
 
 // Solo imprime en consola los datos
