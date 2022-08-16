@@ -11,6 +11,23 @@ const pool = new Pool({
 	port: '5432'
 });
 
+
+
+
+const rootHome = async (req, res) => {
+
+        res.send(`<h1> Users </h1>
+            <p>Hola worldo :D</p>
+            <strong>strong</strong>
+            `);
+
+
+// Solo imprime en consola los datos
+    // console.log(response.rows);
+    // res.send('users');
+};
+
+
 const getUsers = async (req, res) => {
 
 	const response = await pool.query('SELECT * FROM users');
