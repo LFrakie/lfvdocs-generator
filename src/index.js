@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 
+
+const port = process.env.PORT || 3000;
+
 //definir middlewares: hace referencia a algunas funciones que se ejecutan antes que lleguen a las rutas
 // si en los #routes "rutas" necesitamos procesar un dato antes hay una 
 // funcion que ayuda a entender esos datos  
@@ -18,6 +21,10 @@ app.use(express.urlencoded({extended: false}));
 app.use(require('./routes/index'));
 
 
-app.listen(3000);
+app.listen(port, () => {
+    console.log('Visita el puerto: ' + port);
+})
 
-console.log('server on 3000');
+// app.listen(3000);
+
+// console.log('server on 3000');
