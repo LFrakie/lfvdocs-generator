@@ -22,7 +22,7 @@ app.use(require('./routes/index'));
 
 
 app.listen(port, () => {
-    console.log('Visita el puerto: ' + port);
+    console.log('Servido en el puerto: ' + port);
 })
 
 // app.listen(3000);
