@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 // importamos metodo de controllers
-const { getUsers, getUserById, createUser, updateUser, deleteUser, rootHome } = require('../controllers/index.controller')
+const { getUserById, rootHome } = require('../controllers/index.controller')
 
 router.get('/', rootHome);
 

@@ -17,7 +17,7 @@ const pool = new Pool({
 const rootHome = async (req, res) => {
 
         res.send(`
-                <input type="text" placeholder="URL de document" name="urlvdocn" id="urlvdoc">
+                <input type="text" placeholder="URL de document" name="urlvdocn" id="urlvdoc"><br>
                 <input type="text" placeholder="NOMBRE de document" name="namvdocn" id="namvdoc">
   <br>
   <button onclick="toGenerate()">Generar</button>
