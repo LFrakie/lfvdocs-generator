@@ -1,6 +1,11 @@
 //Para conectarnos a postgresql
 const { Pool } = require('pg');
 
+// const exec = require('child_process').exec;
+const { exec } = require('child_process');
+
+require("dotenv").config();
+
 var fs = require('fs');
 
 const pool = new Pool({
@@ -12,11 +17,29 @@ const pool = new Pool({
 });
 
 
+const deTest = async (req, res) => {
+
+        res.send("deTest is work :D and execute ls|bash in console" + " y lecutura de ENV - Gpass es igual a: " + process.env.Gpass);
+
+exec('ls -a', (err, stdout, stderr) => {
+  if (err) {
+    //some err occurred
+    console.error(err)
+  } else {
+   // the *entire* stdout and stderr (buffered)
+   console.log(`stdout:\n\n${stdout}`);
+   console.log(`stderr: ${stderr}`);
+   console.log(process.env.Gpass);
+  }
+});
+};
+
 
 
 const rootHome = async (req, res) => {
 
         res.send(`
+            <h2> Test Branch</h2>>
                 <input type="text" name="urlvdocn" id="urlvdoc">
                 <input type="text" name="namvdocn" id="namvdoc">
   <br>
@@ -45,23 +68,25 @@ var fileContent = `<h1> Parametros </h1>
 <br>
 <strong>La url es:</strong><br>
 <a href="https://lfvdoc.github.io/${req.params.url}">${req.params.url}</a>
-
 ` 
 + extracode;
 
+
 var docGenerado = req.params.namedoc;
 
-var filepath = docGenerado +".htm";
+var filepath = './src/pubdocs/'+docGenerado;
+
+// Este agrega extension- que lo quitamos por el comando wget no descarga con extension correcta
+// var filepath = docGenerado +".htm";
 
 await fs.writeFile(filepath, fileContent, (err) => {
     if (err) throw err;
 
-    console.log("Archivo Generado con exito!");
+    console.log("Archivo " + docGenerado +" Generado con exito!");
     // - Respuesta 
-    res.download('./'+ filepath);
+    res.download(filepath);
 }); 
 // END -- Crear nuevo archivo vdoc ---
-
 
 
 // ## Elimina Archivos creados despues de la descarga 600000 = 10 minutos
@@ -76,11 +101,8 @@ fs.unlink(filepath, (err => {
     console.log("\nArchivo temporal Eliminado: " + filepath);
   }
 }));
-
 }
-
 };
-
 
 
 
@@ -155,6 +177,7 @@ fs.unlink(filepath, (err => {
 
 module.exports = {
     rootHome,
+    deTest,
     getDocgen
      // getUsers,
     // createUser,
