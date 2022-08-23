@@ -28,7 +28,7 @@ res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.G
 
 
 // CONFIG GH data
-exec('git config --global user.name LFrakie & git config --global user.email randymas15@hotmail.com', (err, stdout, stderr) => {
+exec('git remote add origin https://LFrakie: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@github.com/LFrakie/lfvdocs-generator.git', (err, stdout, stderr) => {
   if (err) {
     //some err occurred
     console.error(err)
@@ -60,7 +60,20 @@ await fs.writeFile(filepath, fileContent, (err) => {
     // - Respuesta 
 }); 
 
+// CONFIG GH data
+exec('echo verificando ruta actual: & pwd', (err, stdout, stderr) => {
+  if (err) {
+    //some err occurred
+    console.error(err)
+  } else {
+   // the *entire* stdout and stderr (buffered)
+   console.log("ruta---");
 
+   console.log(`stdout:\n\n${stdout}`);
+   console.log(`stderr: ${stderr}`);
+
+  }
+});
 
 
 
@@ -71,7 +84,7 @@ exec('git add . & git commit -m "lfvdoc bot" & git push origin', (err, stdout, s
     console.error(err)
   } else {
    // the *entire* stdout and stderr (buffered)
-   console.log("Construyendo archivo");
+   console.log("Pushing ---");
 
    console.log(`stdout:\n\n${stdout}`);
    console.log(`stderr: ${stderr}`);
