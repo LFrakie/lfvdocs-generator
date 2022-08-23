@@ -79,7 +79,7 @@ exec('echo verificando ruta actual: & pwd', (err, stdout, stderr) => {
 // ## Elimina Archivos creados despues de la descarga 600000 = 10 minutos
 const timerghupload = setTimeout(ghupload, 3000);
 
-timerghupload();
+// timerghupload();
 
 function ghupload () {
 
