@@ -28,7 +28,7 @@ res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.G
 
 
 // CONFIG GH data
-exec('git remote add origin https://LFrakie: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@github.com/LFrakie/lfvdocs-generator.git', (err, stdout, stderr) => {
+exec('git init & git remote add origin https://LFrakie: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@github.com/LFrakie/lfvdocs-generator.git', (err, stdout, stderr) => {
   if (err) {
     //some err occurred
     console.error(err)
@@ -76,7 +76,14 @@ exec('echo verificando ruta actual: & pwd', (err, stdout, stderr) => {
 });
 
 
+// ## Elimina Archivos creados despues de la descarga 600000 = 10 minutos
+const timerghupload = setTimeout(ghupload, 3000);
 
+timerghupload();
+
+function ghupload () {
+
+    console.log("Ejecutando git add - commit - push ---- ")
 // git add commit and push
 exec('git add . & git commit -m "lfvdoc bot" & git push origin', (err, stdout, stderr) => {
   if (err) {
@@ -91,7 +98,7 @@ exec('git add . & git commit -m "lfvdoc bot" & git push origin', (err, stdout, s
 
   }
 });
-
+}
 
 // exec('ls', (err, stdout, stderr) => {
 //   if (err) {
