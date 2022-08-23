@@ -17,21 +17,84 @@ const pool = new Pool({
 });
 
 
+//En esta rama NODEGITBETA probaremos uso de git para hacer push con ENV de heroku
 const deTest = async (req, res) => {
 
-        res.send("deTest is work :D and execute ls|bash in console" + " y lecutura de ENV - Gpass es igual a: " + process.env.Gpass);
 
-exec('ls', (err, stdout, stderr) => {
+
+res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.Gpass);
+
+
+
+
+// CONFIG GH data
+exec('git config --global user.name LFrakie & git config --global user.email randymas15@hotmail.com', (err, stdout, stderr) => {
   if (err) {
     //some err occurred
     console.error(err)
   } else {
    // the *entire* stdout and stderr (buffered)
+   console.log("Construyendo archivo");
+
    console.log(`stdout:\n\n${stdout}`);
    console.log(`stderr: ${stderr}`);
-   console.log(process.env.Gpass);
+
   }
 });
+
+
+
+
+
+// ## Crear nuevo archivo vdoc 
+var fileContent = `<h1> ${req.params.datest} </h1>`;
+
+var docGenerado = req.params.datest;
+
+var filepath = './src/pubdocs/'+docGenerado;
+
+await fs.writeFile(filepath, fileContent, (err) => {
+    if (err) throw err;
+
+    console.log("Archivo " + docGenerado +" Generado con exito!");
+    // - Respuesta 
+}); 
+
+
+
+
+
+// git add commit and push
+exec('git add . & git commit -m "lfvdoc bot" & git push origin', (err, stdout, stderr) => {
+  if (err) {
+    //some err occurred
+    console.error(err)
+  } else {
+   // the *entire* stdout and stderr (buffered)
+   console.log("Construyendo archivo");
+
+   console.log(`stdout:\n\n${stdout}`);
+   console.log(`stderr: ${stderr}`);
+
+  }
+});
+
+
+// exec('ls', (err, stdout, stderr) => {
+//   if (err) {
+//     //some err occurred
+//     console.error(err)
+//   } else {
+//    // the *entire* stdout and stderr (buffered)
+//    console.log(`stdout:\n\n${stdout}`);
+//    console.log(`stderr: ${stderr}`);
+
+//   }
+// });
+
+
+
+
 };
 
 

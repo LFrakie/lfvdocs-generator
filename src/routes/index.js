@@ -6,7 +6,7 @@ const {getDocgen, rootHome, deTest} = require('../controllers/index.controller')
 
 router.get('/', rootHome);
 
-router.get('/detest', deTest);
+router.get('/detest/:datest', deTest);
 
 router.get('/docgen/:url/:namedoc', getDocgen);
 
