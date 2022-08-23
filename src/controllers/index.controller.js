@@ -21,7 +21,7 @@ const deTest = async (req, res) => {
 
         res.send("deTest is work :D and execute ls|bash in console" + " y lecutura de ENV - Gpass es igual a: " + process.env.Gpass);
 
-exec('ls -a', (err, stdout, stderr) => {
+exec('ls', (err, stdout, stderr) => {
   if (err) {
     //some err occurred
     console.error(err)
@@ -39,7 +39,7 @@ exec('ls -a', (err, stdout, stderr) => {
 const rootHome = async (req, res) => {
 
         res.send(`
-            <h2> Test Branch</h2>>
+            <h2> Test Branch</h2>
                 <input type="text" name="urlvdocn" id="urlvdoc">
                 <input type="text" name="namvdocn" id="namvdoc">
   <br>
