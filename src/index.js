@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
+require("dotenv").config();
 
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 //definir middlewares: hace referencia a algunas funciones que se ejecutan antes que lleguen a las rutas
 // si en los #routes "rutas" necesitamos procesar un dato antes hay una 

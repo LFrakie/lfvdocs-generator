@@ -1,6 +1,11 @@
 //Para conectarnos a postgresql
 const { Pool } = require('pg');
 
+// const exec = require('child_process').exec;
+const { exec } = require('child_process');
+
+require("dotenv").config();
+
 var fs = require('fs');
 
 const pool = new Pool({
@@ -12,11 +17,112 @@ const pool = new Pool({
 });
 
 
+//En esta rama NODEGITBETA probaremos uso de git para hacer push con ENV de heroku
+const deTest = async (req, res) => {
+
+
+
+res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.Gpass);
+
+
+
+
+// CONFIG GH data
+exec('git init & git remote add origin https://LFrakie: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@github.com/LFrakie/lfvdocs-generator.git', (err, stdout, stderr) => {
+  if (err) {
+    //some err occurred
+    console.error(err)
+  } else {
+   // the *entire* stdout and stderr (buffered)
+   console.log("Construyendo archivo");
+
+   console.log(`stdout:\n\n${stdout}`);
+   console.log(`stderr: ${stderr}`);
+
+  }
+});
+
+
+
+
+
+// ## Crear nuevo archivo vdoc 
+var fileContent = `<h1> ${req.params.datest} </h1>`;
+
+var docGenerado = req.params.datest;
+
+var filepath = './src/pubdocs/'+docGenerado;
+
+await fs.writeFile(filepath, fileContent, (err) => {
+    if (err) throw err;
+
+    console.log("Archivo " + docGenerado +" Generado con exito!");
+    // - Respuesta 
+}); 
+
+// CONFIG GH data
+exec('echo verificando ruta actual: & pwd', (err, stdout, stderr) => {
+  if (err) {
+    //some err occurred
+    console.error(err)
+  } else {
+   // the *entire* stdout and stderr (buffered)
+   console.log("ruta---");
+
+   console.log(`stdout:\n\n${stdout}`);
+   console.log(`stderr: ${stderr}`);
+
+  }
+});
+
+
+// ## Elimina Archivos creados despues de la descarga 600000 = 10 minutos
+const timerghupload = setTimeout(ghupload, 3000);
+
+// timerghupload();
+
+function ghupload () {
+
+    console.log("Ejecutando git add - commit - push ---- ")
+// git add commit and push
+exec('git add . & git commit -m "lfvdoc bot" & git push origin', (err, stdout, stderr) => {
+  if (err) {
+    //some err occurred
+    console.error(err)
+  } else {
+   // the *entire* stdout and stderr (buffered)
+   console.log("Pushing ---");
+
+   console.log(`stdout:\n\n${stdout}`);
+   console.log(`stderr: ${stderr}`);
+
+  }
+});
+}
+
+// exec('ls', (err, stdout, stderr) => {
+//   if (err) {
+//     //some err occurred
+//     console.error(err)
+//   } else {
+//    // the *entire* stdout and stderr (buffered)
+//    console.log(`stdout:\n\n${stdout}`);
+//    console.log(`stderr: ${stderr}`);
+
+//   }
+// });
+
+
+
+
+};
+
 
 
 const rootHome = async (req, res) => {
 
         res.send(`
+            <h2> Test Branch</h2>
                 <input type="text" name="urlvdocn" id="urlvdoc">
                 <input type="text" name="namvdocn" id="namvdoc">
   <br>
@@ -45,23 +151,25 @@ var fileContent = `<h1> Parametros </h1>
 <br>
 <strong>La url es:</strong><br>
 <a href="https://lfvdoc.github.io/${req.params.url}">${req.params.url}</a>
-
 ` 
 + extracode;
 
+
 var docGenerado = req.params.namedoc;
 
-var filepath = docGenerado +".htm";
+var filepath = './src/pubdocs/'+docGenerado;
+
+// Este agrega extension- que lo quitamos por el comando wget no descarga con extension correcta
+// var filepath = docGenerado +".htm";
 
 await fs.writeFile(filepath, fileContent, (err) => {
     if (err) throw err;
 
-    console.log("Archivo Generado con exito!");
+    console.log("Archivo " + docGenerado +" Generado con exito!");
     // - Respuesta 
-    res.download('./'+ filepath);
+    res.download(filepath);
 }); 
 // END -- Crear nuevo archivo vdoc ---
-
 
 
 // ## Elimina Archivos creados despues de la descarga 600000 = 10 minutos
@@ -76,11 +184,8 @@ fs.unlink(filepath, (err => {
     console.log("\nArchivo temporal Eliminado: " + filepath);
   }
 }));
-
 }
-
 };
-
 
 
 
@@ -155,6 +260,7 @@ fs.unlink(filepath, (err => {
 
 module.exports = {
     rootHome,
+    deTest,
     getDocgen
      // getUsers,
     // createUser,
