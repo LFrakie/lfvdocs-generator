@@ -21,8 +21,17 @@ res.send("For single Test ");
 const vdvGenerate = async (req, res) => {
 
 // res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.Gpass);
-res.send("VDV Generandose: " + req.params.titlevd + " vista en breve");
 
+res.send(`VDV Generandose:  <h3> ${req.params.titlevd}</h3>
+<br>
+<br>
+ vista previa: <a href="https://lfvdoc.github.io/${req.params.titlevd}">https://lfvdoc.github.io/${req.params.titlevd}</a>
+<br>
+<br>
+ HOME: <a href="https://lfvdoc.github.io/">https://lfvdoc.github.io/</a>
+
+
+    `);
 
 // ## Crear nuevo archivo vdoc 
 var fileContent = `---
