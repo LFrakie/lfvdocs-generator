@@ -1,55 +1,48 @@
-//Para conectarnos a postgresql
-const { Pool } = require('pg');
+//En esta rama usaremos acios y base 64 para subir archivos a github 
 
-// const exec = require('child_process').exec;
-const { exec } = require('child_process');
-
+var axios = require('axios');
 require("dotenv").config();
-
 var fs = require('fs');
-
-const pool = new Pool({
-	host: 'localhost',
-	user: 'postgres',
-	password: 'admin',
-	database: 'picapibet',
-	port: '5432'
-});
+var base64 = require('base-64');
+var moment = require('moment');
 
 
-//En esta rama NODEGITBETA probaremos uso de git para hacer push con ENV de heroku
 const deTest = async (req, res) => {
+res.send("For Test ");
+};
+
+const singTest = async (req, res) => {
+res.send("For single Test ");
+};
 
 
 
-res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.Gpass);
 
+const vdvGenerate = async (req, res) => {
 
-
-
-// CONFIG GH data
-exec('git init & git remote add origin https://LFrakie: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@github.com/LFrakie/lfvdocs-generator.git', (err, stdout, stderr) => {
-  if (err) {
-    //some err occurred
-    console.error(err)
-  } else {
-   // the *entire* stdout and stderr (buffered)
-   console.log("Construyendo archivo");
-
-   console.log(`stdout:\n\n${stdout}`);
-   console.log(`stderr: ${stderr}`);
-
-  }
-});
-
-
-
+// res.send("GUser: " + process.env.Guser + " <br><br> GPassword: " + process.env.Gpass);
+res.send("VDV Generandose: " + req.params.titlevd + " vista en breve");
 
 
 // ## Crear nuevo archivo vdoc 
-var fileContent = `<h1> ${req.params.datest} </h1>`;
+var fileContent = `---
+image: "/uploads/docs-icon.jpg"
+author: varbot
+layout: vdoc
+title: ${req.params.titlevd}
+url_or_doc: true
+sur-doc: ''
+sur: https://lfvdocs-generator.herokuapp.com/
+categories:
+- nodeapi
+tags: []
 
-var docGenerado = req.params.datest;
+---`;
+
+
+var getdate = moment().format('YYYY-MM-DD-');
+
+var docGenerado = getdate + req.params.titlevd + ".md";
 
 var filepath = './src/pubdocs/'+docGenerado;
 
@@ -60,77 +53,112 @@ await fs.writeFile(filepath, fileContent, (err) => {
     // - Respuesta 
 }); 
 
-// CONFIG GH data
-exec('echo verificando ruta actual: & pwd', (err, stdout, stderr) => {
-  if (err) {
-    //some err occurred
-    console.error(err)
-  } else {
-   // the *entire* stdout and stderr (buffered)
-   console.log("ruta---");
 
-   console.log(`stdout:\n\n${stdout}`);
-   console.log(`stderr: ${stderr}`);
+// AQUI TENEMOS FUNCIONES ANIDADAS
+// ## Crear arch base64 con tiempo
+const timeb64gen = setTimeout(toBaseConvert, 1000);
 
-  }
-});
+function toBaseConvert() {
+
+let file = fs.readFileSync(filepath).toString();
+console.log(file);
+
+var content = base64.encode(file);
+console.log(content);
 
 
-// ## Elimina Archivos creados despues de la descarga 600000 = 10 minutos
-const timerghupload = setTimeout(ghupload, 3000);
+// START uploadFileApi
+const pushToGit = setTimeout(pushDoc, 2000);
 
-// timerghupload();
+function pushDoc() {
 
-function ghupload () {
+console.log("============== Enviando GH API");
 
-    console.log("Ejecutando git add - commit - push ---- ")
-// git add commit and push
-exec('git add . & git commit -m "lfvdoc bot" & git push origin', (err, stdout, stderr) => {
-  if (err) {
-    //some err occurred
-    console.error(err)
-  } else {
-   // the *entire* stdout and stderr (buffered)
-   console.log("Pushing ---");
+let token = process.env.Gpass;
 
-   console.log(`stdout:\n\n${stdout}`);
-   console.log(`stderr: ${stderr}`);
+uploadFileApi(token, content)
 
-  }
-});
+
+
+function uploadFileApi(token, content) {
+
+    var data = JSON.stringify({
+        "message": "txt file from nodev2",
+        "content": `${content}`
+    });
+
+    var config = {
+        method: 'put',
+        url: `https://api.github.com/repos/lfvdoc/lfvdoc.github.io/contents/_posts/${docGenerado}`,
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        data: data
+    };
+
+    axios(config)
+        .then(function (response) {
+            console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+ });
+} // END uploadFileApi
+
+} // END pushDoc
+
 }
 
-// exec('ls', (err, stdout, stderr) => {
-//   if (err) {
-//     //some err occurred
-//     console.error(err)
-//   } else {
-//    // the *entire* stdout and stderr (buffered)
-//    console.log(`stdout:\n\n${stdout}`);
-//    console.log(`stderr: ${stderr}`);
-
-//   }
-// });
-
-
+// AQUI TERMINA LAS FUNCIONES ANIDADAS
 
 
 };
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const rootHome = async (req, res) => {
 
+
         res.send(`
-            <h2> Test Branch</h2>
-                <input type="text" name="urlvdocn" id="urlvdoc">
-                <input type="text" name="namvdocn" id="namvdoc">
+            <h2> LFvdoc View Generator </h2>
+                <input type="text" name="urlvdocn" id="vdocname" placeholder="Doc Name">
+  <br>
   <br>
   <button onclick="toGenerate()">Generar</button>
 
+  <br>
+  <br>
+  <br>
+  <br>
+
+<footer> Test Branch - nodeapigit 2022</footer>
+
     <script type='text/javascript'>
         function toGenerate() {
-            url = 'https://lfvdocs-generator.herokuapp.com/docgen/' + document.getElementById("urlvdoc").value + '/'+ document.getElementById("urlvdoc").value
+            url = '/generate/' + document.getElementById("vdocname").value
             window.open(url, '_self');
         }
 </script>
@@ -138,6 +166,21 @@ const rootHome = async (req, res) => {
 `);
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -186,6 +229,13 @@ fs.unlink(filepath, (err => {
 }));
 }
 };
+
+
+
+
+
+
+
 
 
 
@@ -261,7 +311,9 @@ fs.unlink(filepath, (err => {
 module.exports = {
     rootHome,
     deTest,
-    getDocgen
+    singTest,
+    getDocgen,
+    vdvGenerate
      // getUsers,
     // createUser,
     // updateUser,

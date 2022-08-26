@@ -2,11 +2,16 @@ const { Router } = require('express');
 const router = Router();
 
 // importamos metodo de controllers
-const {getDocgen, rootHome, deTest} = require('../controllers/index.controller')
+const {vdvGenerate, getDocgen, rootHome, deTest, singTest} = require('../controllers/index.controller')
 
 router.get('/', rootHome);
 
-router.get('/detest/:datest', deTest);
+
+router.get('/singtest', singTest);
+
+router.get('/generate/:titlevd', vdvGenerate);
+
+router.get('/detest/:titlevd', deTest);
 
 router.get('/docgen/:url/:namedoc', getDocgen);
 
